@@ -8,7 +8,7 @@ Author: Shihab
 
 Authentication: Custom implementation (e.g., JWT/OAuth)
 
-Maintained by: Shihab
+Maintained by: Hybritech Innovation LTD
 
 🛠️ Tech Stack
 Layer	Technology

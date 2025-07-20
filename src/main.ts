@@ -6,8 +6,6 @@ import { MyODataServer } from './odata/odata.server';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-
   app.use('/odata', MyODataServer.create());
 
   await app.listen(3000);

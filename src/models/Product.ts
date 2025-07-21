@@ -1,7 +1,6 @@
-// src/entities/product.entity.ts
+// src/models/Product.ts
 import { Edm } from 'odata-v4-server';
-
-// src/entities/product.entity.ts
+import { Order } from './Order';
 
 export class Product {
   @Edm.Key
@@ -12,7 +11,7 @@ export class Product {
   name!: string;
 
   @Edm.String
-  description?:  string | null;
+  description?: string | null;
 
   @Edm.Double 
   price!: number;
@@ -22,5 +21,8 @@ export class Product {
 
   @Edm.DateTimeOffset
   updatedAt!: Date;
+
+  @Edm.Collection(Edm.EntityType(Order))
+  orders?: Order[];  // <- this must exist and be decorated properly
 }
 

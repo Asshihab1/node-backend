@@ -1,14 +1,26 @@
 // src/entities/product.entity.ts
 import { Edm } from 'odata-v4-server';
 
+// src/entities/product.entity.ts
+
 export class Product {
   @Edm.Key
   @Edm.Int32
-  id: number;
+  id!: number;
 
   @Edm.String
-  name: string;
+  name!: string;
 
-  @Edm.Decimal
-  price: number;
+  @Edm.String
+  description?:  string | null;
+
+  @Edm.Double 
+  price!: number;
+
+  @Edm.DateTimeOffset
+  createdAt!: Date;
+
+  @Edm.DateTimeOffset
+  updatedAt!: Date;
 }
+

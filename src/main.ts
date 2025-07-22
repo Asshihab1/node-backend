@@ -1,7 +1,6 @@
 // src/main.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as express from 'express';
 import { MyODataServer } from './odata/odata.server';
 
 async function bootstrap() {

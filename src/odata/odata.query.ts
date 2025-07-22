@@ -4,7 +4,6 @@ export function convertToPrismaQuery(query: any): any {
   const prismaQuery: any = {};
 
   if (query?.$filter) {
-    // Parse the $filter string to AST
     const ast = parseFilter(query.$filter);
     prismaQuery.where = mapFilterToPrisma(ast);
   }

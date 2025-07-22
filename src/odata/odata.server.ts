@@ -1,9 +1,9 @@
 // src/odata/odata-server.ts
 import { ODataServer, odata } from 'odata-v4-server';
-import { createODataController } from './generic-odata.controller';
+import { createODataController } from '@odata/generic-odata.controller';
 import { Product } from '@model/Product';
 import { Order } from '@model/Order';
-import { GenericODataService } from './services/generic-odata.service';
+import { GenericODataService } from '@odata/services/generic-odata.service';
 import { PrismaService } from '@prisma/prisma.service';
 
 const prismaService = new PrismaService();

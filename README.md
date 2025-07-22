@@ -17,3 +17,27 @@ API Protocol	OData v4
 ORM	Prisma
 Database	PostgreSQL / MySQL (please specify if needed)
 Auth Mechanism	JWT or OAuth
+
+
+<!-- Odata querys -->
+
+$orderby=id desc
+$orderby=id desc name asc
+
+edit :
+     Products(3)
+
+delete : 
+     Products(2)     
+
+
+expand relation
+        odata/Products?$expand=orders
+
+
+only count : 
+        odata/Products/$count 
+        
+
+
+

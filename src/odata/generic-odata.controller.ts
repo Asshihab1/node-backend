@@ -42,12 +42,28 @@ export function createODataController(
       }
 
       const { onlyCount, ...prismaQuery } = convertToPrismaQuery(rawQuery);
+
       if (onlyCount) {
         const count = await service.count(modelName, prismaQuery.where);
         return { count };
       }
 
       return service.findAll(modelName, prismaQuery);
+    }
+
+    async count(query: any) {
+      const rawQuery: any = {};
+      const options = query?.value?.options || [];
+
+      for (const option of options) {
+        if (option.type === 'Filter') {
+          rawQuery.$filter = option.raw.replace(/^\$filter=/, '');
+        }
+      }
+
+      const { where } = convertToPrismaQuery(rawQuery);
+      const count = await service.count(modelName, where);
+      return count; // Return number, not object
     }
 
     async getOne(key: number) {
@@ -72,16 +88,16 @@ export function createODataController(
     }
   };
 
-  // Dynamically assign a unique class name
   Object.defineProperty(ControllerClass, 'name', {
     value: `${esName}Controller`,
   });
 
-  // Apply decorators
+  // OData decorators
   odata.type(entity)(ControllerClass);
   Edm.EntitySet(esName)(ControllerClass);
 
   odata.GET()(ControllerClass.prototype, 'get');
+  odata.GET()(ControllerClass.prototype, 'count'); // required for /$count
   odata.GET()(ControllerClass.prototype, 'getOne');
   odata.POST()(ControllerClass.prototype, 'insert');
   odata.PATCH()(ControllerClass.prototype, 'update');
@@ -98,6 +114,7 @@ export function createODataController(
   odata.body(ControllerClass.prototype, 'replace', 1);
 
   odata.query(ControllerClass.prototype, 'get', 0);
+  odata.query(ControllerClass.prototype, 'count', 0); // required
 
   return ControllerClass;
 }

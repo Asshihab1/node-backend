@@ -1,3 +1,4 @@
+import { TodoappModule } from './module/todoapp/todoapp.module';
 import { ShiftVisuModule } from './module/shiftvisu/shiftvisu.module';
 import { NewVisuModule } from './module/newvisu/newvisu.module';
 
@@ -9,6 +10,7 @@ import { apiRoutes } from '../src/routers/api.router';
 
 @Module({
   imports: [
+    TodoappModule,
     ShiftVisuModule,
     NewVisuModule,
     

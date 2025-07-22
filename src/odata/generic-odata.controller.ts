@@ -15,7 +15,7 @@ export function createODataController(
 
   const ControllerClass = class extends ODataController {
     async get(query: any) {
-      const rawQuery: any = {};
+      const rawQuery: any = {}; 
       const options = query?.value?.options || [];
 
       for (const option of options) {

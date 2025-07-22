@@ -63,7 +63,7 @@ export function createODataController(
 
       const { where } = convertToPrismaQuery(rawQuery);
       const count = await service.count(modelName, where);
-      return count; // Return number, not object
+      return count;
     }
 
     async getOne(key: number) {
@@ -92,12 +92,11 @@ export function createODataController(
     value: `${esName}Controller`,
   });
 
-  // OData decorators
   odata.type(entity)(ControllerClass);
   Edm.EntitySet(esName)(ControllerClass);
 
   odata.GET()(ControllerClass.prototype, 'get');
-  odata.GET()(ControllerClass.prototype, 'count'); // required for /$count
+  odata.GET()(ControllerClass.prototype, 'count');
   odata.GET()(ControllerClass.prototype, 'getOne');
   odata.POST()(ControllerClass.prototype, 'insert');
   odata.PATCH()(ControllerClass.prototype, 'update');
@@ -114,7 +113,7 @@ export function createODataController(
   odata.body(ControllerClass.prototype, 'replace', 1);
 
   odata.query(ControllerClass.prototype, 'get', 0);
-  odata.query(ControllerClass.prototype, 'count', 0); // required
+  odata.query(ControllerClass.prototype, 'count', 0);
 
   return ControllerClass;
 }

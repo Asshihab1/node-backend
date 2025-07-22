@@ -11,6 +11,7 @@ import { apiRoutes } from '../src/routers/api.router';
   imports: [
     ShiftVisuModule,
     NewVisuModule,
+    
     RouterModule.register([
       {
         path: 'api',

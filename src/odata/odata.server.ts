@@ -9,11 +9,14 @@ import { PrismaService } from '@prisma/prisma.service';
 const prismaService = new PrismaService();
 const service = new GenericODataService(prismaService);
 
-// Create unique controller classes for each model
+// =========== Create OData Controllers ============
 const ProductController = createODataController(Product, 'product', service);
 const OrderController = createODataController(Order, 'order', service);
 
-// Register both controllers
+
+
+
+// ============ Register OData Controllers ============
 @odata.controller(ProductController, true)
 @odata.controller(OrderController, true)
 export class MyODataServer extends ODataServer {}

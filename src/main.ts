@@ -8,6 +8,6 @@ async function bootstrap() {
   app.use( '/odata', MyODataServer.create());
 
   await app.listen(3000);
-  console.log('NestJS + OData running at http://localhost:3000/odata/Products');
+  console.log('NestJS running at http://localhost:3000');
 }
 bootstrap();

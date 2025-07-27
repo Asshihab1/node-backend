@@ -1,9 +1,9 @@
 import { Routes } from '@nestjs/core';
-import { ShiftVisuModule } from './shiftvisu.module';
+import { ShiftvisuModule } from '@module/shiftvisu/shiftvisu.module';
 
-export const ShiftVisuRoutes: Routes = [
+export const ShiftvisuRoutes: Routes = [
   {
     path: 'shiftvisu',
-    module: ShiftVisuModule,
+    module: ShiftvisuModule,
   },
 ];

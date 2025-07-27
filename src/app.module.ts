@@ -1,18 +1,17 @@
-import { TodoappModule } from './module/todoapp/todoapp.module';
-import { ShiftVisuModule } from './module/shiftvisu/shiftvisu.module';
-import { NewVisuModule } from './module/newvisu/newvisu.module';
+import { ShiftvisuModule } from '@module/shiftvisu/shiftvisu.module';
+
 
 import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 import { PrismaService } from './prisma/prisma.service';
 import { apiRoutes } from '../src/routers/api.router';
 
-
 @Module({
   imports: [
-    TodoappModule,
-    ShiftVisuModule,
-    NewVisuModule,
+    ShiftvisuModule,
+
+
+    
     
     RouterModule.register([
       {

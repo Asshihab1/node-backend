@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ShiftVisuController } from './shiftvisu.controller';
-import { ShiftVisuService } from './shiftvisu.service';
+import { ShiftvisuController } from '@module/shiftvisu/shiftvisu.controller';
+import { ShiftvisuService } from '@module/shiftvisu/shiftvisu.service';
 
 @Module({
-  controllers: [ShiftVisuController],
-  providers: [ShiftVisuService],
+  controllers: [ShiftvisuController],
+  providers: [ShiftvisuService],
 })
-export class ShiftVisuModule {}
+export class ShiftvisuModule {}

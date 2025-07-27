@@ -11,7 +11,7 @@ if (args.length < 3 || args[0] !== 'new' || args[1] !== 'module') {
 
 const rawName = args[2];
 
-// Convert to PascalCase and clean input
+
 const moduleName = rawName
   .split(/[\s\-]+/)
   .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -40,8 +40,8 @@ export class ${moduleName}Service {
 `;
 
 const moduleContent = `import { Module } from '@nestjs/common';
-import { ${moduleName}Controller } from './${moduleName.toLowerCase()}.controller';
-import { ${moduleName}Service } from './${moduleName.toLowerCase()}.service';
+import { ${moduleName}Controller } from '@module/${moduleName.toLowerCase()}/${moduleName.toLowerCase()}.controller';
+import { ${moduleName}Service } from '@module/${moduleName.toLowerCase()}/${moduleName.toLowerCase()}.service';
 
 @Module({
   controllers: [${moduleName}Controller],
@@ -51,7 +51,7 @@ export class ${moduleName}Module {}
 `;
 
 const routeContent = `import { Routes } from '@nestjs/core';
-import { ${moduleName}Module } from './${moduleName.toLowerCase()}.module';
+import { ${moduleName}Module } from '@module/${moduleName.toLowerCase()}/${moduleName.toLowerCase()}.module';
 
 export const ${moduleName}Routes: Routes = [
   {
@@ -68,7 +68,7 @@ fs.writeFileSync(path.join(basePath, `route.ts`), routeContent);
 
 // === Update api.router.ts ===
 const routerFile = path.join(__dirname, '..', 'src', 'routers', 'api.router.ts');
-const importLine = `import { ${moduleName}Routes } from '../module/${moduleName.toLowerCase()}/route';\n`;
+const importLine = `import { ${moduleName}Routes } from '@module/${moduleName.toLowerCase()}/route';\n`;
 const spreadLine = `  ...${moduleName}Routes,`;
 
 let routerSource = fs.readFileSync(routerFile, 'utf-8');
@@ -85,7 +85,7 @@ fs.writeFileSync(routerFile, routerSource);
 const appModulePath = path.join(__dirname, '..', 'src', 'app.module.ts');
 let appModuleContent = fs.readFileSync(appModulePath, 'utf-8');
 
-const appImportLine = `import { ${moduleName}Module } from './module/${moduleName.toLowerCase()}/${moduleName.toLowerCase()}.module';\n`;
+const appImportLine = `import { ${moduleName}Module } from '@module/${moduleName.toLowerCase()}/${moduleName.toLowerCase()}.module';\n`;
 if (!appModuleContent.includes(appImportLine)) {
   appModuleContent = appImportLine + appModuleContent;
 }
@@ -95,4 +95,4 @@ appModuleContent = appModuleContent.replace(
 );
 fs.writeFileSync(appModulePath, appModuleContent);
 
-console.log(`✅ Module "${moduleName}" created and registered successfully!`);
+console.log(`Module "${moduleName}" created and registered successfully!`);

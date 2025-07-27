@@ -1,6 +1,6 @@
 // src/models/Order.ts
 import { Edm } from 'odata-v4-server';
-import { Product } from './Product';
+import { Product } from '@model/Product';
 
 export class Order {
   @Edm.Key

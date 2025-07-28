@@ -1,0 +1,12 @@
+// Todoapp Database initialization code here
+
+
+model todo {
+  id        Int      @id @default(autoincrement())
+  title     String
+  description String?
+  started Boolean  @default(false)
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

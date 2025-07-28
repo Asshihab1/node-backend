@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
 
 @Controller()
-export class ShiftvisuController {
+export class TodoappController {
   @Get()
   getHello() {
-    return { message: 'Shiftvisu works' };
+    return { message: 'Todoapp works' };
   }
 }

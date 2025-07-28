@@ -1,6 +1,4 @@
-import { ShiftvisuModule } from '@module/shiftvisu/shiftvisu.module';
-
-
+import { TodoappModule } from '@module/todoapp/todoapp.module';
 import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 import { PrismaService } from './prisma/prisma.service';
@@ -8,15 +6,11 @@ import { apiRoutes } from '../src/routers/api.router';
 
 @Module({
   imports: [
-    ShiftvisuModule,
-
-
-    
-    
+    TodoappModule,
     RouterModule.register([
       {
         path: 'api',
-        children: apiRoutes, 
+        children: apiRoutes,
       },
     ]),
   ],

@@ -16,6 +16,7 @@ const OrderController = createODataController(Order, 'order', service);
 
 
 
+
 // ============ Register OData Controllers ============
 @odata.controller(ProductController, true)
 @odata.controller(OrderController, true)

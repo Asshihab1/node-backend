@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class ShiftvisuService {
+export class TodoappService {
   // Service methods here
 }

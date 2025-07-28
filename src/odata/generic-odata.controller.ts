@@ -1,6 +1,6 @@
 // src/shared/generic-odata.controller.ts
 import { ODataController, odata, Edm } from 'odata-v4-server';
-import { convertToPrismaQuery } from '../odata/odata.query';
+import { convertToPrismaQuery } from '@odata/odata.query';
 import {
   GenericODataService,
   PrismaModelName,
@@ -17,7 +17,7 @@ export function createODataController(
     async get(query: any) {
       const rawQuery: any = {}; 
       const options = query?.value?.options || [];
-
+console.log('Raw Query Options:', options);
       for (const option of options) {
         switch (option.type) {
           case 'Filter':

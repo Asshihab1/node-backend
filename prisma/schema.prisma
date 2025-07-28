@@ -1,34 +1,16 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Todoapp Database initialization code here
+// Todoapp Database initialization code here
+// Todoapp Database initialization code here
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// 🌍 Module: todoapp
+// Todoapp Database initialization code here
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-}
-
-model Product {
+model todo {
   id          Int      @id @default(autoincrement())
-  name        String
+  title       String
   description String?
-  price       Float
+  started     Boolean  @default(false)
+  completed   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  orders      Order[]
-}
-
-model Order {
-  id         Int      @id @default(autoincrement())
-  productId  Int
-  quantity   Int
-  totalPrice Float
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  product Product @relation(fields: [productId], references: [id])
 }

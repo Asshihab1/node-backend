@@ -5,8 +5,8 @@
       "@module/*": ["module/*"],
       "@router/*": ["routers/*"],
       "@prisma/*": ["prisma/*"],
-      "@model/*": ["models/*"],
       "@odata/*": ["odata/*"],
+      "@models/*": ["models/*"]
     },
     // your existing options...
     "module": "commonjs",

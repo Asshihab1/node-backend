@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class TodoappService {
+export class ProductService {
   // Service methods here
 }

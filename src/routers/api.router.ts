@@ -1,4 +1,3 @@
-import { TodoappRoutes } from '@module/todoapp/route';
+import { ProductRoutes } from '@module/product/route';
 import { Routes } from '@nestjs/core';
-export const apiRoutes: Routes = [
-  ...TodoappRoutes,];
+export const apiRoutes: Routes = [...ProductRoutes];

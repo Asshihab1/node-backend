@@ -1,4 +1,16 @@
-// Todoapp Database initialization code here
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Todoapp Database schema
+
+// Product Database initialization code here
+
 // Todoapp Database initialization code here
 // Todoapp Database initialization code here
 
@@ -13,4 +25,62 @@ model todo {
   completed   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@map("todos")
+}
+
+// Myapp Database initialization code here
+
+// 🌍 Module: myapp
+// Myapp Database initialization code here
+
+model Myapp {
+  id          Int      @id @default(autoincrement())
+  name        String
+  myapp       String?
+  gggg        String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("myapps")
+}
+
+model MyappDetail {
+  id        Int      @id @default(autoincrement())
+  myappId   Int
+  detail    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("myapp_details")
+}
+
+// Product Database initialization code here
+// Product Database initialization code here
+// Product Database initialization code here
+
+// 🌍 Module: product
+// Product Database initialization code here
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String?
+  category    String?
+
+  @@map("products")
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("orders")
 }

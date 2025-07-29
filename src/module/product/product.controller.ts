@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
 
 @Controller()
-export class TodoappController {
+export class ProductController {
   @Get()
   getHello() {
-    return { message: 'Todoapp works' };
+    return { message: 'Product works' };
   }
 }

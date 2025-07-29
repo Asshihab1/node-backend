@@ -19,13 +19,14 @@ if (args.length === 3 && args[0] === 'new' && args[1] === 'module') {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join('');
 
-  const kebabName = moduleName.toLowerCase();
+  const moduleDir = moduleName.toLowerCase();
 
-  const basePath = path.join(__dirname, '..', 'src', 'module', kebabName);
+  const basePath = path.join(__dirname, '..', 'src', 'module', moduleDir);
   fs.mkdirSync(basePath, { recursive: true });
   fs.mkdirSync(path.join(basePath, 'database'), { recursive: true });
+  fs.mkdirSync(path.join(basePath, 'models'), { recursive: true });
   fs.writeFileSync(
-    path.join(basePath, 'database', `${kebabName}.prisma`),
+    path.join(basePath, 'database', `${moduleDir}.prisma`),
     `// ${moduleName} Database initialization code here\n`,
     'utf-8',
   );
@@ -50,8 +51,8 @@ export class ${moduleName}Service {
 `;
 
   const moduleContent = `import { Module } from '@nestjs/common';
-import { ${moduleName}Controller } from '@module/${kebabName}/${kebabName}.controller';
-import { ${moduleName}Service } from '@module/${kebabName}/${kebabName}.service';
+import { ${moduleName}Controller } from '@module/${moduleDir}/${moduleDir}.controller';
+import { ${moduleName}Service } from '@module/${moduleDir}/${moduleDir}.service';
 
 @Module({
   controllers: [${moduleName}Controller],
@@ -61,28 +62,28 @@ export class ${moduleName}Module {}
 `;
 
   const routeContent = `import { Routes } from '@nestjs/core';
-import { ${moduleName}Module } from '@module/${kebabName}/${kebabName}.module';
+import { ${moduleName}Module } from '@module/${moduleDir}/${moduleDir}.module';
 
 export const ${moduleName}Routes: Routes = [
   {
-    path: '${kebabName}',
+    path: '${moduleDir}',
     module: ${moduleName}Module,
   },
 ];
 `;
 
   fs.writeFileSync(
-    path.join(basePath, `${kebabName}.controller.ts`),
+    path.join(basePath, `${moduleDir}.controller.ts`),
     controllerContent,
     'utf-8',
   );
   fs.writeFileSync(
-    path.join(basePath, `${kebabName}.service.ts`),
+    path.join(basePath, `${moduleDir}.service.ts`),
     serviceContent,
     'utf-8',
   );
   fs.writeFileSync(
-    path.join(basePath, `${kebabName}.module.ts`),
+    path.join(basePath, `${moduleDir}.module.ts`),
     moduleContent,
     'utf-8',
   );
@@ -96,7 +97,7 @@ export const ${moduleName}Routes: Routes = [
     'routers',
     'api.router.ts',
   );
-  const importLine = `import { ${moduleName}Routes } from '@module/${kebabName}/route';\n`;
+  const importLine = `import { ${moduleName}Routes } from '@module/${moduleDir}/route';\n`;
   const spreadLine = `  ...${moduleName}Routes,`;
 
   let routerSource = fs.readFileSync(routerFile, 'utf-8');
@@ -113,7 +114,7 @@ export const ${moduleName}Routes: Routes = [
   const appModulePath = path.join(__dirname, '..', 'src', 'app.module.ts');
   let appModuleContent = fs.readFileSync(appModulePath, 'utf-8');
 
-  const appImportLine = `import { ${moduleName}Module } from '@module/${kebabName}/${kebabName}.module';\n`;
+  const appImportLine = `import { ${moduleName}Module } from '@module/${moduleDir}/${moduleDir}.module';\n`;
   if (!appModuleContent.includes(appImportLine)) {
     appModuleContent = appImportLine + appModuleContent;
   }
@@ -212,6 +213,87 @@ datasource db {
     console.log('Schema formatted and validated!');
   } catch (err) {
     console.error(' Format or validate failed');
+    process.exit(1);
+  }
+
+  try {
+    // Generate OData models from Prisma schema
+    const PRISMA_TO_EDM = {
+      Int: '@Edm.Int32',
+      BigInt: '@Edm.Int64',
+      String: '@Edm.String',
+      Boolean: '@Edm.Boolean',
+      DateTime: '@Edm.DateTimeOffset',
+      Float: '@Edm.Double',
+      Decimal: '@Edm.Decimal',
+    };
+
+    const PRISMA_TO_TS = {
+      Int: 'number',
+      BigInt: 'number',
+      Float: 'number',
+      Decimal: 'number',
+      String: 'string',
+      Boolean: 'boolean',
+      DateTime: 'Date',
+    };
+
+    const modelRegex = /model\s+(\w+)\s+{([^}]*)}/g;
+    const modelDir = path.join(__dirname, `../src/models/${moduleName}`);
+    fs.mkdirSync(modelDir, { recursive: true });
+
+    let match;
+    while ((match = modelRegex.exec(moduleContent)) !== null) {
+      const [_, modelName, body] = match;
+
+      const fields = body
+        .trim()
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(
+          (line) =>
+            line &&
+            !line.startsWith('//') &&
+            !line.startsWith('@@') &&
+            !line.includes('@relation'),
+        );
+
+      const tsFields = fields.map((line) => {
+        const parts = line.split(/\s+/);
+        const [field, typeRaw] = parts;
+
+        if (!field || !typeRaw) return null;
+
+        const isOptional = typeRaw.includes('?');
+        const type = typeRaw.replace('?', '');
+
+        const tsType = PRISMA_TO_TS[type] || 'any';
+        const edm = PRISMA_TO_EDM[type];
+        const isKey = line.includes('@id');
+
+        return [
+          isKey ? `@Edm.Key` : null,
+          edm ? `  ${edm}` : null,
+          `  ${field}${isOptional ? '?' : ''}: ${tsType};`,
+        ]
+          .filter(Boolean)
+          .join('\n');
+      });
+
+      const classDef = `
+import { Edm } from 'odata-v4-server';
+
+export class ${modelName} {
+${tsFields.filter(Boolean).join('\n\n')}
+}
+`.trim();
+
+      const outputTsPath = path.join(modelDir, `${modelName}.ts`);
+      fs.writeFileSync(outputTsPath, classDef);
+      console.log(`✨ Generated OData model: ${outputTsPath}`);
+    }
+  } catch (err) {
+    console.error('❌ Error updating models:', err);
     process.exit(1);
   }
 }

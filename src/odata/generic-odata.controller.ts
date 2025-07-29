@@ -17,7 +17,6 @@ export function createODataController(
     async get(query: any) {
       const rawQuery: any = {}; 
       const options = query?.value?.options || [];
-console.log('Raw Query Options:', options);
       for (const option of options) {
         switch (option.type) {
           case 'Filter':

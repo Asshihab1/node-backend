@@ -1,6 +1,4 @@
-// src/models/Order.ts
 import { Edm } from 'odata-v4-server';
-import { Product } from '@model/Product';
 
 export class Order {
   @Edm.Key
@@ -13,15 +11,9 @@ export class Order {
   @Edm.Int32
   quantity: number;
 
-  @Edm.Double
-  totalPrice: number;
-
   @Edm.DateTimeOffset
   createdAt: Date;
 
   @Edm.DateTimeOffset
   updatedAt: Date;
-
-  @Edm.EntityType(Product)
-  product?: Product;
 }
